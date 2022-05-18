@@ -1,0 +1,159 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <complex>
+#include <iomanip>
+#include "lodepng.h"
+#include <SDL2/SDL.h>
+#include <memory>
+
+#include <array>
+
+
+namespace lodepng {
+unsigned encode(const std::string& filename,
+const unsigned char * image,
+unsigned w, unsigned h,
+LodePNGColorType colortype,
+unsigned bitdepth);
+}
+
+
+
+
+int main(){
+
+    //domain size and mapping
+    double domain=4.0;
+    double pixel_width=8;
+    double dx=(domain/pixel_width)*1;
+    double N = (domain/dx)+1;
+    int Arraay_size=N*N;
+    double pixelData   =0;
+    std::vector<double>X(N,1);
+    std::vector<double>Y(N,1);
+    // std::vector<std::vector<double>>image(N,X);//unsigned char
+    int * ArImg;
+    // std::array<unsigned char,3>ArImg
+    ArImg = new int [Arraay_size];
+    // std::cout<<image.size()<<std::endl;
+    std::cout<<Arraay_size<<std::endl;
+
+    // std::vector<std::complex<double>>y_(N,1);
+    // std::vector<std::vector<std::complex<double>>>DisMat(N,y_);
+
+    //initialization vectors
+    for(int i=0;i<N;++i){
+        X[i]=-2+i*dx;
+        Y[i]=2-i*dx;
+    }
+    std::cout<<"initialization ok"<<std::endl;
+    for(int i=0;i<Arraay_size;++i){
+        ArImg[i]=1;//=-2+i*dx;
+        // Y[i]=2-i*dx;
+    }
+    std::cout<<std::endl;
+     std::complex<double>c_(0,-0.8);
+    for(double j=0;j<N;++j){
+        for(double i=0;i<N;++i){
+            int iters=0;
+            int count=j*N+i;
+            std::complex<double> z(X[i],Y[j]);
+            while(iters<250){
+
+                z = std::pow(z,2) + c_;
+
+                if(std::norm(z) <100)
+                {
+                    
+                    pixelData = 3*iters%255;
+                    
+
+                }
+                ++iters;
+            }
+            ArImg[count]=pixelData;
+            // DisMat[j][i]=std::complex<double>(X[i],Y[j]);
+            // ++count;
+        
+        }
+    }
+     std::cout<<"calculation ok"<<std::endl;
+    // std::memcpy(&array[0], &image[0][0], sizeof(array));
+    
+    //Transferring matrix data
+    // for(int i=0;i<N;++i){
+    //     for(int j=0;j<N;++j){
+    //         ArImg[N*i+j]=image[i][j];
+    //     }
+    // }
+     std::cout<<"Trasfering  ok"<<std::endl;
+//    for(size_t i=0;i<image_.size();++i){
+//         std::cout<<image_[i]<<" ";//=-2+i*dx;
+//         // Y[i]=2-i*dx;
+//     }
+    // std::cout<<std::endl;
+
+    //For Printing
+    const char* filename="test.png";
+    // unsigned char * ArImg;
+    // ArImg = new unsigned char [409600];
+//     //generate some image
+      unsigned width = 640, height = 640;
+//     std::vector<unsigned char> image__;
+//     image__.resize(width * height * 4);
+//     for(unsigned y = 0; y < height; y++)
+//         for(unsigned x = 0; x < width; x++) {
+//     image__[4 * width * y + 4 * x + 0] = 255 * !(x & y);
+//     image__[4 * width * y + 4 * x + 1] = x ^ y;
+//     image__[4 * width * y + 4 * x + 2] = x | y;
+//     image__[4 * width * y + 4 * x + 3] = 255;
+//   }
+
+//   encodeOneStep(filename, image_, width, height);
+
+//    std::cout<<"encoding ok"<<std::endl;
+    // for(int i=0;i<N;++i){
+    //     for(int j=0;j<N;++j){
+    //         std::cout<<image[i][j]<<",";//=std::complex<double>(i,j);
+    //     }
+    //     std::cout<<std::endl;
+    // }
+    // std::cout<<image.size()<<std::endl;
+    // std::cout<<image.size()<<std::endl;
+    // // std::cout<<image_.size()<<std::endl;
+    for(int i=0;i<Arraay_size;++i){
+        std::cout<<ArImg[i]<<" ";
+
+    }
+    std::cout<<std::endl;
+
+    // using lodepng::encode;
+    // encode(filename, ArImg, width, height,LCT_RGB,8);
+    delete[]ArImg;
+        
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+    // for(int i=0;i<N;++i){
+    //     std::cout<<X[i]<<" ";
+    // }
+    // std::cout<<std::endl;
+
+    // for(int i=0;i<N;++i){
+    //     std::cout<<Y[i]<<" ";
+    // }
+    // std::cout<<std::endl;
+
+    // std::vector<std::complex<double>>b(N);
+    // std::vector<std::vector<std::complex<double>>>DisMat(N,b);
